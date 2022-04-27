@@ -1,0 +1,11 @@
+#!/bin/bash
+cd "$(dirname "$0")/.."
+path=`realpath $(dirname "$0")`
+cd "${path}/.."
+
+DOTENV_SHELL_LOADER_SAVED_OPTS=$(set +o)
+set -o allexport
+[ -f .env ] && source .env 2> /dev/null
+set +o allexport
+eval "$DOTENV_SHELL_LOADER_SAVED_OPTS"
+unset DOTENV_SHELL_LOADER_SAVED_OPTS

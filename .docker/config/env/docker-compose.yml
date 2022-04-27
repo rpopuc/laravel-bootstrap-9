@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+
+    workspace:
+        image: rpopuc/workspace:7.2
+        volumes:
+            - .:/var/www
+        tty: true
+
+
+    app:
+        image: rpopuc/php-fpm-nginx:7.3
+        volumes:
+            - .:/var/www
+            - .docker/logs/nginx:/var/log/nginx
+        environment:
+            - VIRTUAL_HOST_URL=${APP_URL}
+            - VIRTUAL_HOST_HTTPS=${APP_HTTPS}
+        depends_on:
+            - workspace
+
+
+    postgres:
+        image: rpopuc/postgres:10
+        volumes:
+            - .docker/data/postgres:/var/lib/postgresql/data
+            - .docker/config/postgres/initdb:/docker-entrypoint-initdb.d
+        environment:
+            - POSTGRES_DB=${DB_DATABASE}
+            - POSTGRES_USER=${DB_USERNAME}
+            - POSTGRES_PASSWORD=${DB_PASSWORD}
+
+
+    redis:
+        image: rpopuc/redis:4-alpine
+        volumes:
+            - .docker/data/redis:/data
+
+
+    laravel-echo:
+        image: rpopuc/laravel-echo-server:7.2
+        volumes:
+            - .docker/config/laravel-echo/laravel-echo-server.json:/usr/app/src/laravel-echo-server.json:ro
+        environment:
+            - VIRTUAL_HOST_URL=${APP_URL}
+            - VIRTUAL_HOST_HTTPS=${APP_HTTPS}
+            - VIRTUAL_HOST_FORCE_HTTPS=false
+            - VIRTUAL_HOST_PORT=6001
+            - VIRTUAL_HOST_PATH=/ws/
+        links:
+            - redis

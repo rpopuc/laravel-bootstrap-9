@@ -1,0 +1,44 @@
+parameters:
+  git_hook_variables:
+    EXEC_GRUMPHP_COMMAND: 'docker-compose exec -T app php'
+  stop_on_failure: false
+  tasks:
+    clover_coverage:
+      clover_file: build/phpunit_clover.xml
+      level: 100
+    composer: ~
+    phpcs:
+      metadata:
+        priority: 2
+      standard: phpcs.xml
+      whitelist_patterns:
+        - app/
+        - bootstrap/app.php
+        - config/
+        - public/
+        - resources/lang
+        - routes/
+        - tests/
+      ignore_patterns:
+        - vendor
+        - storage
+        - bootstrap
+    phpstan:
+      configuration: phpstan.neon
+      metadata:
+        priority: 2
+      ignore_patterns:
+        - vendor
+        - storage
+        - bootstrap
+        - database
+        - routes
+    phpunit:
+      always_execute: true
+      config_file: phpunit.dist.xml
+      metadata:
+        priority: 1
+    yamllint:
+      ignore_patterns:
+        - vendor
+        - node_modules

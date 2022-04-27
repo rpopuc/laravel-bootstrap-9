@@ -1,0 +1,8 @@
+#!/bin/bash
+source ./bin/_setup
+
+if [ $# -eq 0 ]; then
+    docker-compose exec --user laradock workspace bash
+else
+    docker-compose exec --user $1 workspace bash
+fi

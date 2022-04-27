@@ -1,0 +1,23 @@
+# Docker
+/docker-compose.override.yml
+/.bash_history
+
+# Configuration
+/.env
+/.env.testing
+
+# Node dependencies
+/node_modules
+/npm-debug.log
+/yarn-error.log
+
+# Composer dependencies
+/vendor
+
+# Laravel
+/public/hot
+/public/storage
+/storage/*.key
+/.phpunit.result.cache
+/Homestead.json
+/Homestead.yaml

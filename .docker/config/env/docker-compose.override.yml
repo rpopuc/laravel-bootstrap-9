@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+
+    app:
+        environment:
+            - VIRTUAL_HOST_URL=${APP_URL}
+            - VIRTUAL_HOST_HTTPS=${APP_HTTPS}
+        # ports:
+        #     - 80:80
+
+    laravel-echo:
+        environment:
+            - VIRTUAL_HOST_URL=${APP_URL}
+            - VIRTUAL_HOST_HTTPS=${APP_HTTPS}
+            - VIRTUAL_HOST_FORCE_HTTPS=false
+            - VIRTUAL_HOST_PORT=6001
+            - VIRTUAL_HOST_PATH=/ws/
+
+    cypress:
+        image: cypress/included:3.4.1
+        volumes:
+            - ./tests/acceptance:/e2e
+            - ./.docker/data/cypress/screenshots:/e2e/cypress/screenshots
+            - ./.docker/data/cypress/videos:/e2e/cypress/videos
+            - /tmp/.X11-unix:/tmp/.X11-unix
+        working_dir: /e2e
+        environment:
+            - DISPLAY
+            - CYPRESS_baseUrl=http://app
+        depends_on:
+            - app
+        entrypoint: bash
+        tty: true

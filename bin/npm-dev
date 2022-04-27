@@ -1,0 +1,4 @@
+#!/bin/bash
+source ./bin/_setup
+
+docker-compose exec --user laradock workspace bash -c "npm --prefix /var/www/ run dev"

@@ -1,0 +1,27 @@
+image: docker
+
+services:
+  - docker:dind
+
+before_script:
+  - apk add --no-cache --no-progress docker-compose
+
+tests:
+  cache:
+    key: "$CI_COMMIT_REF_SLUG"
+    paths:
+      - vendor
+  artifacts:
+    when: always
+    paths:
+      - tests/Browser
+    expire_in: 1 day
+  script:
+    - cp .env.example .env
+    - cp .env.dusk.example .env.dusk
+    - cp .env.dusk.example .env.dusk.local
+    - cp .env.testing.example .env.testing
+    - docker-compose -f .ci/docker-compose.ci.yml up -d
+    - docker-compose -f .ci/docker-compose.ci.yml exec -T workspace composer setup-ci
+    - docker-compose -f .ci/docker-compose.ci.yml exec -T workspace vendor/bin/grumphp run
+    - docker-compose -f .ci/docker-compose.ci.yml exec -T workspace php artisan dusk

@@ -1,0 +1,16 @@
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+  [entryPoints.https]
+  address = ":443"
+
+[accessLog]
+
+[providers.file]
+filename = "/etc/traefik/traefik-file.toml"
+
+[providers.docker]
+endpoint = "unix:///var/run/docker.sock"
+exposedByDefault = false
+
+[api]

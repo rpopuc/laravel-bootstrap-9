@@ -1,0 +1,13 @@
+#!/bin/bash
+source ./bin/_setup
+
+params=$@
+artisan=`docker-compose exec --user laradock workspace bash -c "php artisan --version"`
+node=`docker-compose exec --user laradock workspace bash -c "node --version"`
+npm=`docker-compose exec --user laradock workspace bash -c "npm --version"`
+postgres=`docker-compose exec postgres psql --version`
+
+echo 'Laravel:' $artisan
+echo 'Node:' $node
+echo 'NPM:' $npm
+echo 'Postgres:' $postgres

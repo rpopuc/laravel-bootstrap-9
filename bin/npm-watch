@@ -1,0 +1,5 @@
+#!/bin/bash
+source ./bin/_setup
+
+docker-compose exec --user laradock workspace bash -c \
+    "/var/www/node_modules/.bin/webpack --watch --watch-poll --config=/var/www/node_modules/laravel-mix/setup/webpack.config.js"

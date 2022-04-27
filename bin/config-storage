@@ -1,0 +1,5 @@
+#!/bin/bash
+source ./bin/_setup
+
+docker-compose exec workspace bash -c "chown -R laradock /var/www/storage"
+docker-compose exec php-fpm bash -c "chown -R www-data /var/www/storage"

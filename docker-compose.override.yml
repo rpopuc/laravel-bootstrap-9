@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+
+    workspace:
+        image: rpopuc/workspace:8
+        environment:
+            - XDEBUG_MODE=off
+
+        volumes:
+            - ~/.ssh:/home/laravel/.ssh
+            - ./:/var/www/
+
+    proxy:
+        image: traefik:2.0
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - ./:/var/www
+            - ./.docker/config/traefik:/etc/traefik
+        ports:
+            - "80:80"
+            - "443:443"
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.api_http.rule=Host(`proxy.local`)"
+            - "traefik.http.routers.api_http.middlewares=secure@file"
+            - "traefik.http.routers.api.rule=Host(`proxy.local`)"
+            - "traefik.http.routers.api.service=api@internal"
+            - "traefik.http.routers.api.tls=true"
+
+    app:
+        volumes:
+            - ~/.ssh:/home/laradock/.ssh
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.laravel_base_http.rule=Host(`laravel.local`)"
+            - "traefik.http.routers.laravel_base_http.middlewares=secure@file"
+            - "traefik.http.routers.laravel_base.rule=Host(`laravel.local`)"
+            - "traefik.http.routers.laravel_base.tls=true"
+
+    postgres:
+        environment:
+            - POSTGRES_DB=app
+            - POSTGRES_USER=app
+            - POSTGRES_PASSWORD=app
