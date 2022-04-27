@@ -6,3 +6,4 @@ cd "$(dirname "$0")/.."
 ./bin/composer-install
 ./bin/npm-install
 ./bin/npm-dev
+./bin/migrate-and-seed

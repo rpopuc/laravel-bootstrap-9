@@ -1,4 +1,4 @@
 #!/bin/bash
 source ./bin/_setup
 
-docker-compose exec workspace bash -c "php /var/www/artisan migrate:refresh --seed"
+docker-compose exec workspace bash -c "php /var/www/artisan migrate:fresh --seed"
